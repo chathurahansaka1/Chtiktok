@@ -322,36 +322,10 @@
         }
 
         function renderVideoPreview(videoData) {
+            const title = videoData.title || videoData.desc || 'TikTok Video';
             document.getElementById('previewContainer').innerHTML = `
                 <div class="preview-container">
-                    <div class="video-preview">
-                        <video controls>
-                            <source src="${videoData.play}" type="video/mp4">
-                            Video Playback Unavailable
-                        </video>
-                    </div>
-                    <div class="video-details">
-                        <div class="detail-item">
-                            <span>⏱️</span> Duration
-                            <span>${videoData.duration} sec</span>
-                        </div>
-                        <div class="detail-item">
-                            <span>❤️</span> Likes
-                            <span>${videoData.digg_count}</span>
-                        </div>
-                        <div class="detail-item">
-                            <span>💬</span> Comments
-                            <span>${videoData.comment_count}</span>
-                        </div>
-                        <div class="detail-item">
-                            <span>🔁</span> Shares
-                            <span>${videoData.share_count}</span>
-                        </div>
-                        <div class="detail-item">
-                            <span>👤</span> Creator
-                            <span>${videoData.author.nickname}</span>
-                        </div>
-                    </div>
+                    <h3>${title}</h3>
                     <div class="download-buttons">
                         <button class="download-btn watermark-btn" 
                                 onclick="downloadVideo('wmplay')">
