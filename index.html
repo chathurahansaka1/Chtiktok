@@ -4,13 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CH TikTok Downloader</title>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@300;400;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --neon-pink: #ff1493;
-            --neon-blue: #00ffff;
-            --neon-green: #39ff14;
-            --dark-bg: #0a0a1a;
+            --primary-color: #00ffff;
+            --secondary-color: #ff00ff;
+            --bg-dark: #0a0a1a;
+            --text-color: #e0e0e0;
         }
 
         * {
@@ -20,237 +20,282 @@
         }
 
         body {
-            font-family: 'Orbitron', sans-serif;
-            background: linear-gradient(45deg, var(--dark-bg), #1a1a2e);
-            color: #fff;
+            font-family: 'Chakra Petch', sans-serif;
+            background: linear-gradient(135deg, var(--bg-dark), #1a1a2e);
+            color: var(--text-color);
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            perspective: 1000px;
+            padding: 20px;
             overflow-x: hidden;
         }
 
-        .container {
-            background: rgba(26, 26, 46, 0.8);
+        .cyber-container {
+            width: 100%;
+            max-width: 1000px;
+            background: rgba(20, 20, 40, 0.8);
             border-radius: 20px;
-            padding: 40px;
-            width: 95%;
-            max-width: 900px;
+            padding: 30px;
             box-shadow: 
-                0 0 20px rgba(255, 20, 147, 0.3),
-                0 0 40px rgba(0, 255, 255, 0.2);
-            border: 2px solid transparent;
-            border-image: linear-gradient(45deg, var(--neon-pink), var(--neon-blue)) 1;
-            transform-style: preserve-3d;
-            transform: rotateX(10deg);
-            transition: all 0.3s ease;
+                0 0 30px rgba(0, 255, 255, 0.2),
+                0 0 60px rgba(255, 0, 255, 0.1);
+            position: relative;
+            overflow: hidden;
         }
 
-        .header {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            margin-bottom: 30px;
+        .cyber-header {
+            text-align: center;
+            margin-bottom: 20px;
         }
 
-        .tiktok-logo {
+        .cyber-logo {
             width: 80px;
             height: 80px;
-            margin-bottom: 15px;
-            filter: drop-shadow(0 0 15px var(--neon-pink));
-            animation: float 3s ease-in-out infinite;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            border-radius: 50%;
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 10px;
+            box-shadow: 
+                0 0 20px var(--primary-color),
+                0 0 40px var(--secondary-color);
         }
 
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-15px); }
+        .cyber-logo img {
+            width: 50%;
+            filter: brightness(1.2) contrast(1.5);
         }
 
-        .title {
-            font-size: 2.5rem;
-            background: linear-gradient(45deg, var(--neon-pink), var(--neon-blue));
+        .cyber-title {
+            font-size: 1.8rem;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            text-shadow: 0 0 10px rgba(255, 20, 147, 0.5);
+            text-transform: uppercase;
+            letter-spacing: 2px;
         }
 
         .input-section {
             display: flex;
+            flex-direction: column;
             gap: 15px;
-            margin-bottom: 30px;
+            margin-bottom: 20px;
         }
 
-        .url-input {
-            flex-grow: 1;
-            padding: 15px;
+        .cyber-input {
+            width: 100%;
+            padding: 12px;
             background: rgba(30, 30, 50, 0.7);
-            border: 2px solid var(--neon-blue);
+            border: 2px solid var(--primary-color);
             border-radius: 10px;
-            color: #fff;
-            font-family: 'Orbitron', sans-serif;
-            transition: all 0.3s ease;
+            color: var(--text-color);
+            font-family: 'Chakra Petch', sans-serif;
         }
 
-        .url-input:focus {
-            outline: none;
-            box-shadow: 0 0 15px var(--neon-blue);
+        .button-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
         }
 
-        .preview-btn {
-            padding: 15px 25px;
-            background: linear-gradient(45deg, var(--neon-pink), var(--neon-blue));
+        .btn {
+            flex-grow: 1;
+            padding: 12px;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
             border: none;
             border-radius: 10px;
-            color: #fff;
+            color: var(--bg-dark);
             cursor: pointer;
-            font-family: 'Orbitron', sans-serif;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
             transition: transform 0.3s ease;
+            min-width: 120px;
         }
 
-        .preview-btn:hover {
+        .btn:hover {
             transform: scale(1.05);
-            box-shadow: 0 0 20px rgba(255, 20, 147, 0.5);
         }
 
         .preview-container {
             display: flex;
-            flex-wrap: wrap;
+            flex-direction: column;
             gap: 20px;
-            justify-content: space-between;
-            margin-bottom: 30px;
+            margin-bottom: 20px;
         }
 
         .video-preview {
-            flex: 1;
-            min-width: 300px;
+            width: 100%;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 
+                0 0 20px rgba(0, 255, 255, 0.3),
+                0 0 40px rgba(255, 0, 255, 0.2);
         }
 
         .video-preview video {
             width: 100%;
             border-radius: 15px;
-            box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
         }
 
         .video-details {
-            flex: 1;
-            min-width: 300px;
             background: rgba(30, 30, 50, 0.5);
-            padding: 20px;
+            padding: 15px;
             border-radius: 15px;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
         }
 
         .detail-item {
             display: flex;
             align-items: center;
-            margin-bottom: 15px;
-            font-size: 1rem;
+            gap: 8px;
+            color: var(--primary-color);
+            font-weight: bold;
         }
 
         .detail-item span {
-            margin-right: 10px;
             font-size: 1.2rem;
+            color: var(--text-color);
         }
 
         .download-buttons {
             display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
             justify-content: center;
-            gap: 20px;
         }
 
         .download-btn {
-            padding: 15px 30px;
+            flex-grow: 1;
+            padding: 12px;
             border: none;
             border-radius: 10px;
-            font-family: 'Orbitron', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 1px;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: transform 0.3s ease;
+            min-width: 150px;
         }
 
         .watermark-btn {
             background: linear-gradient(45deg, #ff4500, #ff6347);
-            color: #fff;
+            color: white;
         }
 
         .no-watermark-btn {
             background: linear-gradient(45deg, #00ffff, #1e90ff);
-            color: #fff;
+            color: var(--bg-dark);
         }
 
-        .download-btn:hover {
-            transform: scale(1.1);
-            box-shadow: 0 0 20px rgba(255, 69, 0, 0.5);
+        .url-history {
+            background: rgba(30, 30, 50, 0.5);
+            padding: 15px;
+            border-radius: 10px;
+            max-height: 200px;
+            overflow-y: auto;
         }
 
-        @media (max-width: 768px) {
-            .container {
-                padding: 20px;
-                width: 98%;
-                transform: none;
+        .url-history-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            padding: 10px;
+            background: rgba(40, 40, 60, 0.7);
+            border-radius: 5px;
+        }
+
+        @media (max-width: 600px) {
+            .cyber-container {
+                padding: 15px;
             }
 
-            .input-section {
-                flex-direction: column;
+            .cyber-title {
+                font-size: 1.5rem;
             }
 
-            .preview-container {
-                flex-direction: column;
-            }
-
-            .video-preview, 
             .video-details {
-                min-width: 100%;
+                grid-template-columns: 1fr;
             }
 
+            .button-container,
             .download-buttons {
                 flex-direction: column;
             }
-        }
 
-        .loader {
-            border: 4px solid transparent;
-            border-top: 4px solid var(--neon-blue);
-            border-radius: 50%;
-            width: 50px;
-            height: 50px;
-            animation: spin 1s linear infinite;
-            margin: 20px auto;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+            .btn, .download-btn {
+                width: 100%;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <img src="https://www.tiktok.com/favicon.ico" alt="TikTok Logo" class="tiktok-logo">
-            <h1 class="title">CH TikTok Downloader</h1>
+    <div class="cyber-container">
+        <div class="cyber-header">
+            <div class="cyber-logo">
+                <img src="https://www.tiktok.com/favicon.ico" alt="TikTok Logo">
+            </div>
+            <h1 class="cyber-title">CH TikTok Downloader</h1>
         </div>
 
         <div class="input-section">
-            <input type="text" class="url-input" id="tiktokUrl" 
-                   placeholder="Paste TikTok Video URL Here 🔗">
-            <button class="preview-btn" onclick="previewVideo()">
-                Preview Video 🎬
-            </button>
+            <input type="text" class="cyber-input" id="tiktokUrl" 
+                   placeholder="Paste TikTok Video URL 🌐">
+            
+            <div class="button-container">
+                <button class="btn" onclick="previewVideo()">
+                    Analyze Video 🤖
+                </button>
+                <button class="btn" onclick="loadNextVideo()">
+                    Next Video ➡️
+                </button>
+            </div>
         </div>
 
         <div id="previewContainer"></div>
+
+        <div id="urlHistory" class="url-history">
+            <h3>Recent URLs</h3>
+        </div>
     </div>
 
     <script>
+        // Array to store video history
+        let videoHistory = [];
+        let currentVideoIndex = -1;
+
         async function previewVideo() {
             const url = document.getElementById('tiktokUrl').value.trim();
             const previewContainer = document.getElementById('previewContainer');
+            const urlHistoryContainer = document.getElementById('urlHistory');
 
-            // Reset and show loader
-            previewContainer.innerHTML = '<div class="loader"></div>';
+            // Add to history if not already exists
+            if (url && !videoHistory.includes(url)) {
+                videoHistory.push(url);
+                currentVideoIndex = videoHistory.length - 1;
+                updateUrlHistory();
+            }
+
+            previewContainer.innerHTML = `
+                <div style="display: flex; justify-content: center; align-items: center; height: 200px;">
+                    <div style="
+                        width: 50px;
+                        height: 50px;
+                        border: 4px solid transparent;
+                        border-top: 4px solid var(--primary-color);
+                        border-radius: 50%;
+                        animation: spin 1s linear infinite;
+                    "></div>
+                </div>
+            `;
 
             if (!url) {
-                previewContainer.innerHTML = '<p>Please enter a valid TikTok URL 🚫</p>';
+                previewContainer.innerHTML = '<p>Enter a valid TikTok URL 🚫</p>';
                 return;
             }
 
@@ -267,25 +312,29 @@
                             <div class="video-preview">
                                 <video controls>
                                     <source src="${videoData.play}" type="video/mp4">
-                                    Your browser does not support the video tag.
+                                    Video Playback Unavailable
                                 </video>
                             </div>
                             <div class="video-details">
-                                <h2>Video Details 📋</h2>
                                 <div class="detail-item">
-                                    <span>⏱️</span> Duration: ${videoData.duration} seconds
+                                    <span>⏱️</span> Duration
+                                    <span>${videoData.duration} sec</span>
                                 </div>
                                 <div class="detail-item">
-                                    <span>❤️</span> Likes: ${videoData.digg_count}
+                                    <span>❤️</span> Likes
+                                    <span>${videoData.digg_count}</span>
                                 </div>
                                 <div class="detail-item">
-                                    <span>💬</span> Comments: ${videoData.comment_count}
+                                    <span>💬</span> Comments
+                                    <span>${videoData.comment_count}</span>
                                 </div>
                                 <div class="detail-item">
-                                    <span>🔁</span> Shares: ${videoData.share_count}
+                                    <span>🔁</span> Shares
+                                    <span>${videoData.share_count}</span>
                                 </div>
                                 <div class="detail-item">
-                                    <span>👤</span> Author: ${videoData.author.nickname}
+                                    <span>👤</span> Creator
+                                    <span>${videoData.author.nickname}</span>
                                 </div>
                             </div>
                         </div>
@@ -301,11 +350,55 @@
                         </div>
                     `;
                 } else {
-                    previewContainer.innerHTML = '<p>Unable to fetch video details 😓</p>';
+                    previewContainer.innerHTML = '<p>Video Analysis Failed 🤖</p>';
                 }
             } catch (error) {
-                console.error('Error:', error);
-                previewContainer.innerHTML = '<p>An error occurred while fetching video details 🚨</p>';
+                console.error('Cyber Error:', error);
+                previewContainer.innerHTML = '<p>Transmission Error 🚨</p>';
+            }
+        }
+
+        function updateUrlHistory() {
+            const urlHistoryContainer = document.getElementById('urlHistory');
+            
+            // Limit history to last 5 URLs
+            if (videoHistory.length > 5) {
+                videoHistory.shift();
+            }
+
+            // Clear and repopulate history
+            urlHistoryContainer.innerHTML = '<h3>Recent URLs</h3>';
+            videoHistory.reverse().forEach((url, index) => {
+                const historyItem = document.createElement('div');
+                historyItem.classList.add('url-history-item');
+                historyItem.innerHTML = `
+                    <span>${url.substring(0, 30)}...</span>
+                    <button onclick="loadHistoryVideo(${videoHistory.length - 1 - index})">
+                        Load 🔄
+                    </button>
+                `;
+                urlHistoryContainer.appendChild(historyItem);
+            });
+        }
+
+        function loadHistoryVideo(index) {
+            if (index >= 0 && index < videoHistory.length) {
+                document.getElementById('tiktokUrl').value = videoHistory[index];
+                previewVideo();
+            }
+        }
+
+        function loadNextVideo() {
+            currentVideoIndex++;
+            if (currentVideoIndex >= videoHistory.length) {
+                currentVideoIndex = 0;
+            }
+
+            if (videoHistory.length > 0) {
+                document.getElementById('tiktokUrl').value = videoHistory[currentVideoIndex];
+                previewVideo();
+            } else {
+                alert('No previous videos in history! 🚫');
             }
         }
 
@@ -313,7 +406,7 @@
             const url = document.getElementById('tiktokUrl').value.trim();
             
             if (!url) {
-                alert('Please enter a TikTok URL 🚫');
+                alert('Input TikTok URL 🚫');
                 return;
             }
 
@@ -329,20 +422,20 @@
                         const a = document.createElement('a');
                         a.href = downloadUrl;
                         a.download = withWatermark 
-                            ? 'tiktok_with_watermark.mp4' 
-                            : 'tiktok_no_watermark.mp4';
+                            ? 'ch_tiktok_watermarked.mp4' 
+                            : 'ch_tiktok_pure.mp4';
                         document.body.appendChild(a);
                         a.click();
                         document.body.removeChild(a);
                     } else {
-                        alert('Download URL not available 😕');
+                        alert('Download Failed 😕');
                     }
                 } else {
-                    alert('Failed to fetch video details 🚫');
+                    alert('Video Download Error 🚫');
                 }
             } catch (error) {
                 console.error('Download Error:', error);
-                alert('An error occurred during download 🚨');
+                alert('Transmission Download Error 🚨');
             }
         }
     </script>
