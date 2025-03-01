@@ -367,24 +367,72 @@
             `;
         }
 
-        function downloadVideo(type) {
+        async function downloadVideo(type) {
             if (!currentVideoData) return;
-            const link = document.createElement('a');
-            link.href = currentVideoData[type];
-            link.download = `tiktok_${Date.now()}.mp4`;
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
+            
+            const downloadBtn = document.querySelector(`.${type === 'wmplay' ? 'watermark-btn' : 'no-watermark-btn'}`);
+            const originalText = downloadBtn.innerHTML;
+            
+            try {
+                downloadBtn.innerHTML = '⬇️ Downloading...';
+                downloadBtn.disabled = true;
+
+                // Fetch the video as blob
+                const response = await fetch(currentVideoData[type]);
+                const blob = await response.blob();
+                
+                // Create downloadable link
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.style.display = 'none';
+                a.href = url;
+                a.download = `tiktok_${Date.now()}.mp4`;
+                document.body.appendChild(a);
+                a.click();
+                
+                // Cleanup
+                window.URL.revokeObjectURL(url);
+                document.body.removeChild(a);
+            } catch (error) {
+                alert('Download failed! Please try again.');
+            } finally {
+                downloadBtn.innerHTML = originalText;
+                downloadBtn.disabled = false;
+            }
         }
 
-        function downloadAudio() {
+        async function downloadAudio() {
             if (!currentVideoData?.music) return;
-            const link = document.createElement('a');
-            link.href = currentVideoData.music;
-            link.download = `tiktok_audio_${Date.now()}.mp3`;
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
+            
+            const audioBtn = document.querySelector('.audio-btn');
+            const originalText = audioBtn.innerHTML;
+            
+            try {
+                audioBtn.innerHTML = '🎵 Processing...';
+                audioBtn.disabled = true;
+
+                // Fetch audio as blob
+                const response = await fetch(currentVideoData.music);
+                const blob = await response.blob();
+                
+                // Create downloadable link
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.style.display = 'none';
+                a.href = url;
+                a.download = `tiktok_audio_${Date.now()}.mp3`;
+                document.body.appendChild(a);
+                a.click();
+                
+                // Cleanup
+                window.URL.revokeObjectURL(url);
+                document.body.removeChild(a);
+            } catch (error) {
+                alert('Audio download failed!');
+            } finally {
+                audioBtn.innerHTML = originalText;
+                audioBtn.disabled = false;
+            }
         }
 
         function loadNextVideo() {
