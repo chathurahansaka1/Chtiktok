@@ -272,13 +272,12 @@
     <script>
         let videoHistory = [];
         let currentVideoIndex = -1;
-        let currentVideoData = null; // Stores the latest video data
+        let currentVideoData = null;
 
         async function previewVideo() {
             const url = document.getElementById('tiktokUrl').value.trim();
             const previewContainer = document.getElementById('previewContainer');
 
-            // Add to history if new URL
             if (url && !videoHistory.includes(url)) {
                 videoHistory.push(url);
                 currentVideoIndex = videoHistory.length - 1;
@@ -286,7 +285,6 @@
                 updateUrlHistory();
             }
 
-            // Show loader
             previewContainer.innerHTML = `
                 <div style="display: flex; justify-content: center; align-items: center; height: 200px;">
                     <div style="
@@ -301,7 +299,7 @@
             `;
 
             if (!url) {
-                previewContainer.innerHTML = '<p>Enter a valid TikTok URL 🚫</p>';
+                previewContainer.innerHTML = '<p>Enter valid URL 🚫</p>';
                 return;
             }
 
@@ -311,80 +309,106 @@
                 const data = await response.json();
 
                 if (data.code === 0 && data.data) {
-                    currentVideoData = data.data; // Store video data
+                    currentVideoData = data.data;
                     renderVideoPreview(data.data);
                 } else {
-                    previewContainer.innerHTML = '<p>Video Analysis Failed 🤖</p>';
+                    previewContainer.innerHTML = '<p>Analysis Failed 🤖</p>';
                 }
             } catch (error) {
-                previewContainer.innerHTML = '<p>Transmission Error 🚨</p>';
+                previewContainer.innerHTML = '<p>Connection Error 🚨</p>';
             }
         }
 
         function renderVideoPreview(videoData) {
-            const title = videoData.title || videoData.desc || 'TikTok Video';
             document.getElementById('previewContainer').innerHTML = `
                 <div class="preview-container">
-                    <h3>${title}</h3>
+                    <div class="video-preview">
+                        <video controls>
+                            <source src="${videoData.play}" type="video/mp4">
+                        </video>
+                    </div>
+                    <div class="video-details">
+                        <div class="detail-item">
+                            <span>⏱️</span> Duration
+                            <span>${videoData.duration}s</span>
+                        </div>
+                        <div class="detail-item">
+                            <span>❤️</span> Likes
+                            <span>${videoData.digg_count}</span>
+                        </div>
+                        <div class="detail-item">
+                            <span>💬</span> Comments
+                            <span>${videoData.comment_count}</span>
+                        </div>
+                        <div class="detail-item">
+                            <span>🔁</span> Shares
+                            <span>${videoData.share_count}</span>
+                        </div>
+                        <div class="detail-item">
+                            <span>👤</span> Author
+                            <span>${videoData.author.nickname}</span>
+                        </div>
+                    </div>
                     <div class="download-buttons">
                         <button class="download-btn watermark-btn" 
                                 onclick="downloadVideo('wmplay')">
-                            Download with Watermark 💦
+                            💦 Watermarked
                         </button>
                         <button class="download-btn no-watermark-btn" 
                                 onclick="downloadVideo('play')">
-                            Download No Watermark 🌟
+                            🌟 Clean Version
                         </button>
                         <button class="download-btn audio-btn" 
                                 onclick="downloadAudio()">
-                            Download Audio 🎵
+                            🎵 Audio Only
                         </button>
                     </div>
                 </div>
             `;
         }
 
-        function loadNextVideo() {
-            if (videoHistory.length === 0) {
-                // Reset to home page if no history
-                document.getElementById('tiktokUrl').value = '';
-                document.getElementById('previewContainer').innerHTML = '';
-                return;
-            }
-
-            currentVideoIndex = (currentVideoIndex + 1) % videoHistory.length;
-            document.getElementById('tiktokUrl').value = videoHistory[currentVideoIndex];
-            previewVideo();
-        }
-
         function downloadVideo(type) {
             if (!currentVideoData) return;
-            const url = currentVideoData[type];
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `tiktok_${Date.now()}.mp4`;
-            a.click();
+            const link = document.createElement('a');
+            link.href = currentVideoData[type];
+            link.download = `tiktok_${Date.now()}.mp4`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
         }
 
         function downloadAudio() {
             if (!currentVideoData?.music) return;
-            const a = document.createElement('a');
-            a.href = currentVideoData.music;
-            a.download = `tiktok_audio_${Date.now()}.mp3`;
-            a.click();
+            const link = document.createElement('a');
+            link.href = currentVideoData.music;
+            link.download = `tiktok_audio_${Date.now()}.mp3`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        function loadNextVideo() {
+            if (videoHistory.length === 0) {
+                document.getElementById('tiktokUrl').value = '';
+                document.getElementById('previewContainer').innerHTML = '';
+                return;
+            }
+            
+            currentVideoIndex = (currentVideoIndex - 1 + videoHistory.length) % videoHistory.length;
+            document.getElementById('tiktokUrl').value = videoHistory[currentVideoIndex];
+            previewVideo();
         }
 
         function updateUrlHistory() {
             const container = document.getElementById('urlHistory');
             container.innerHTML = '<h3>Recent URLs</h3>';
             
-            // Display newest first
-            videoHistory.slice().reverse().forEach((url, index) => {
-                const realIndex = videoHistory.length - 1 - index;
+            videoHistory.slice().reverse().forEach((url, displayIndex) => {
+                const actualIndex = videoHistory.length - 1 - displayIndex;
                 container.innerHTML += `
                     <div class="url-history-item">
                         <span>${url.substring(0, 25)}...</span>
-                        <button onclick="loadHistoryVideo(${realIndex})">Load 🔄</button>
+                        <button onclick="loadHistoryVideo(${actualIndex})">Load 🔄</button>
                     </div>
                 `;
             });
